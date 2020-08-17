@@ -11,23 +11,39 @@ def resolve():
         next_node = i
         temp_num = 0
         temp_res = -100**5
-        cnt = 0
+        cnt = 1
         looped_flag = True
         while Ps[next_node] != i:
-            if cnt >= K:
-                looped_flag = False
-                break
-            next_node = Ps[next_node]
-            temp_num += Cs[next_node]
-            ans = max(ans, temp_num)
             cnt += 1
+            if cnt > K:
+                looped_flag = False
+            else:
+                temp_num += Cs[next_node]
+                temp_res = max(temp_res, temp_num)
+            next_node = Ps[next_node]
 
-        if temp_num > 0 and looped_flag:
-            ans += (K // cnt) * temp_num
+        if looped_flag:
+            cycle = K // cnt
+            tail = K % cnt
+            cnt2 = 0
+            next_node = i
+            while cnt2 <= tail:
+                cnt2 += 1
+                next_node = Ps[next_node]
+                temp_num += Cs[next_node]
+                temp_res = max(temp_res, temp_num)
+            if temp_num > 0:
+                if tail != 0:
+                    ans = max(ans, temp_res + cycle*temp_num)
+                else:
+                    ans = max(ans, temp_res + (cycle-1)*temp_num)
+            else:
+                ans = max(ans, temp_res)
+            
+        else:
+            ans = max(ans, temp_res)
 
-        ans = max(ans, )
-
-
+    print(ans)
 
 
 if __name__ == "__main__":
